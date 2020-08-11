@@ -2,6 +2,8 @@
 
 ## UOS 欧拉版说明
 
+ 通过在 docker 中安装 mock 命令，创建 mockbuild 普通用户，并加入mock组， 外部的工作目录通过 docker run 参数 -v 挂载到内部的 `/rpmbuild` 目录下，编译后结果输出到挂载目录。
+
 1. 下载docker 镜像并导入镜像
 
     ```bash
