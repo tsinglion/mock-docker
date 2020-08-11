@@ -10,7 +10,7 @@ ADD ./build.cfg /etc/mock/build.cfg
 
 RUN yum -c /tmp/repo.conf -y --setopt="tsflags=nodocs" update && \
 	yum -c /tmp/repo.conf clean all && \
-	yum -c /tmp/repo.conf -y --setopt="tsflags=nodocs" install mock rpm-sign expect && \
+	yum -c /tmp/repo.conf -y --setopt="tsflags=nodocs" install mock dnf-plugins-core expect && \
 	yum -c /tmp/repo.conf clean all && \
 	rm -rf /var/cache/yum/
 
