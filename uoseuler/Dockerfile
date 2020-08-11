@@ -15,6 +15,9 @@ RUN dnf -c /tmp/repo.conf clean all 														&& \
 	chmod +x /build-rpm.sh																	&& \
  	useradd -u 135 -G mock mockbuild -d /rpmbuild 											&& \
 	chmod a+r /etc/mock/*.cfg																&& \
+	install -g mock -m 2775 -d /rpmbuild/cache/mock 										&& \
+	echo "config_opts['cache_topdir'] = '/rpmbuild/cache/mock'" >> /etc/mock/site-defaults.cfg 
+
 VOLUME ["/rpmbuild"]
 
 CMD ["/build-rpm.sh"]

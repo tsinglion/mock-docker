@@ -3,13 +3,13 @@
 set -e
 MOCK_BIN=/usr/bin/mock
 MOCK_CONF_FOLDER=/etc/mock
-MOUNT_POINT=$RPM_WORKSPACE
+MOUNT_POINT="/rpmbuild"
 OUTPUT_FOLDER=$MOUNT_POINT/output
 CACHE_FOLDER=$MOUNT_POINT/cache/mock
-MOCK_DEFINES=("$MOCK_DEFINES") # convert strings into array items
+MOCK_DEFINES=($MOCK_DEFINES) # convert strings into array items
 DEF_SIZE=${#MOCK_DEFINES[@]}
 
-if [ "$DEF_SIZE" -gt 0 ];
+if [ $DEF_SIZE -gt 0 ];
 then
   for ((i=0; i<DEF_SIZE; i++));
   do
@@ -75,10 +75,10 @@ elif [ -n "$SPEC_FILE" ]; then
         echo "========================================================================"
         if [ -n "$NO_CLEANUP" ]; then
           # do not cleanup chroot between both mock calls as 1st does not alter it
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER --no-cleanup-after" > "$OUTPUT_FOLDER/script-test.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER --no-cleanup-after \&\& \\" > "$OUTPUT_FOLDER/script-test.sh"
           echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild \$(find $OUTPUT_FOLDER -type f -name \"*.src.rpm\") --resultdir=$OUTPUT_FOLDER --no-clean" >> "$OUTPUT_FOLDER/script-test.sh"
         else
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER" > "$OUTPUT_FOLDER/script-test.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER \&\& \\"  > "$OUTPUT_FOLDER/script-test.sh"
           echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild \$(find $OUTPUT_FOLDER -type f -name \"*.src.rpm\") --resultdir=$OUTPUT_FOLDER" >> "$OUTPUT_FOLDER/script-test.sh"
         fi
 fi
