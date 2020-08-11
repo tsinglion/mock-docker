@@ -75,10 +75,10 @@ elif [ -n "$SPEC_FILE" ]; then
         echo "========================================================================"
         if [ -n "$NO_CLEANUP" ]; then
           # do not cleanup chroot between both mock calls as 1st does not alter it
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER --no-cleanup-after \&\& \\" > "$OUTPUT_FOLDER/mock-build.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER --no-cleanup-after && \\" > "$OUTPUT_FOLDER/mock-build.sh"
           echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild \$(find $OUTPUT_FOLDER -type f -name \"*.src.rpm\") --resultdir=$OUTPUT_FOLDER --no-clean" >> "$OUTPUT_FOLDER/mock-build.sh"
         else
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER \&\& \\"  > "$OUTPUT_FOLDER/mock-build.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER && \\"  > "$OUTPUT_FOLDER/mock-build.sh"
           echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild \$(find $OUTPUT_FOLDER -type f -name \"*.src.rpm\") --resultdir=$OUTPUT_FOLDER" >> "$OUTPUT_FOLDER/mock-build.sh"
         fi
 fi
