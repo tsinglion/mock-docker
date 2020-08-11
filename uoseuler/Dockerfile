@@ -5,7 +5,7 @@ FROM uos-docker-20-arm64:latest
 
 ## docker 内部的repo源没有激活不能用
 ADD ./repo.conf /tmp/repo.conf
-ADD ./build.cfg /etc/mock/build.cfg
+ADD ./uel20-aarch64.cfg /etc/mock/uel20-aarch64.cfg
 ADD ./build-rpm.sh /build-rpm.sh
 
 RUN dnf -c /tmp/repo.conf clean all 														&& \
