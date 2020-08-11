@@ -15,7 +15,6 @@ RUN dnf -c /tmp/repo.conf clean all 														&& \
 	chmod +x /build-rpm.sh																	&& \
  	useradd -u 135 -G mock mockbuild -d /rpmbuild 											&& \
 	chmod a+r /etc/mock/*.cfg																&& \
-
 VOLUME ["/rpmbuild"]
 
 CMD ["/build-rpm.sh"]
