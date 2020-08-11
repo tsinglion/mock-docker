@@ -59,9 +59,9 @@ if [ -n "$SOURCE_RPM" ]; then
         echo "      OUTPUT_FOLDER:  $OUTPUT_FOLDER"
         echo "========================================================================"
         if [ -n "$NO_CLEANUP" ]; then
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild $MOUNT_POINT/$SOURCE_RPM --resultdir=$OUTPUT_FOLDER --no-clean" > "$OUTPUT_FOLDER/script-test.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild $MOUNT_POINT/$SOURCE_RPM --resultdir=$OUTPUT_FOLDER --no-clean" > "$OUTPUT_FOLDER/mock-build.sh"
         else
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild $MOUNT_POINT/$SOURCE_RPM --resultdir=$OUTPUT_FOLDER" > "$OUTPUT_FOLDER/script-test.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild $MOUNT_POINT/$SOURCE_RPM --resultdir=$OUTPUT_FOLDER" > "$OUTPUT_FOLDER/mock-build.sh"
         fi
 elif [ -n "$SPEC_FILE" ]; then
         if [ -z "$SOURCES" ]; then
@@ -75,18 +75,18 @@ elif [ -n "$SPEC_FILE" ]; then
         echo "========================================================================"
         if [ -n "$NO_CLEANUP" ]; then
           # do not cleanup chroot between both mock calls as 1st does not alter it
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER --no-cleanup-after \&\& \\" > "$OUTPUT_FOLDER/script-test.sh"
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild \$(find $OUTPUT_FOLDER -type f -name \"*.src.rpm\") --resultdir=$OUTPUT_FOLDER --no-clean" >> "$OUTPUT_FOLDER/script-test.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER --no-cleanup-after \&\& \\" > "$OUTPUT_FOLDER/mock-build.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild \$(find $OUTPUT_FOLDER -type f -name \"*.src.rpm\") --resultdir=$OUTPUT_FOLDER --no-clean" >> "$OUTPUT_FOLDER/mock-build.sh"
         else
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER \&\& \\"  > "$OUTPUT_FOLDER/script-test.sh"
-          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild \$(find $OUTPUT_FOLDER -type f -name \"*.src.rpm\") --resultdir=$OUTPUT_FOLDER" >> "$OUTPUT_FOLDER/script-test.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --buildsrpm --spec=$MOUNT_POINT/$SPEC_FILE --sources=$MOUNT_POINT/$SOURCES --resultdir=$OUTPUT_FOLDER \&\& \\"  > "$OUTPUT_FOLDER/mock-build.sh"
+          echo "$MOCK_BIN $DEFINE_CMD -v -r $MOCK_CONFIG --rebuild \$(find $OUTPUT_FOLDER -type f -name \"*.src.rpm\") --resultdir=$OUTPUT_FOLDER" >> "$OUTPUT_FOLDER/mock-build.sh"
         fi
 fi
 
 chown mockbuild:mockbuild -R "$MOUNT_POINT"
-runuser -l mockbuild -c "sh $OUTPUT_FOLDER/script-test.sh"
-
-# rm "$OUTPUT_FOLDER/script-test.sh"
+cat "$OUTPUT_FOLDER/mock-build.sh"
+runuser -l mockbuild -c "sh $OUTPUT_FOLDER/mock-build.sh"
+rm "$OUTPUT_FOLDER/mock-build.sh"
 
 if [ -n "$SIGNATURE" ]; then
 	echo "%_signature gpg" > "$HOME/.rpmmacros"
