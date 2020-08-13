@@ -41,3 +41,33 @@
     ```
 
 6. 编译生成的源码包和二进制包在 `$BUILD121/output/uel20-aarch64` 目录下。
+
+## UOS 行业版 说明
+
+1. 初次使用请下载 UOS 行业版 docker 镜像并导入到当前系统中，请确保当前系统已安装 docker 命令。
+
+    ```bash
+    wget http://10.7.10.100/enterprisec/kongzi/release/publish/x86_64/uos-enterprisec-container-20-amd64.tar.xz
+    cat uos-enterprisec-container-20-amd64.tar.xz | sudo docker import - uos-uelc20-amd64
+    ```
+
+2. 创建编译工作目录，存放当前需要编译的 rpm 包的 spec 和源码包
+
+    ```bash
+    TOPDIR=/tmp/build_9528 ##  自行创建目录
+    mkdir -p $TOPDIR/SOURCES/ ## 创建 SOURCES 目录存放源码
+    # cp /path/rpmsource $TOPDIR/SOURCES/ 　## 拷贝spec 和 源码到  SOURCES 目录下
+    ```
+
+3. 更新当前仓库
+
+    ```bash
+    git pull
+    ```
+
+4. 在 仓库的 `uoseuler` 目录下通过 `Dockerfile` 构建新的容器 `uoseuler/mock-rpmbuilder`
+
+    ```bash
+    cd <path_to_git_repo>/uoseuler
+    docker build -t uos-uelc20-amd64/mock-rpmbuilder ./
+    ```
