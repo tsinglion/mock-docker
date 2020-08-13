@@ -5,7 +5,7 @@ FROM uos-uelc20-amd64:latest
 
 ## docker 内部的repo源没有激活不能用
 ADD ./repo.conf /tmp/repo.conf
-ADD ./uelc20-x86_64.cfg /etc/mock/uel20-x86_64.cfg
+ADD ./uelc20-x86_64.cfg /etc/mock/uelc20-x86_64.cfg
 ADD ./build-rpm.sh /build-rpm.sh
 
 RUN dnf -c /tmp/repo.conf clean all 														&& \
